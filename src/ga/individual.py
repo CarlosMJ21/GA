@@ -107,7 +107,6 @@ class Individual():
         self.mutation = mutation
         self.numGenes = len(chromosome)
 
-
     def fitness_function(self):
         """
         Performs the evaluation of the fitness function
@@ -210,6 +209,3 @@ class Individual():
         for gene in mutatedGenes:
             self.chromosome[gene] += np.random.normal(self.chromosome[gene],
                                                       np.std(self.chromosome))
-
-
-
