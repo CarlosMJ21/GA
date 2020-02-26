@@ -30,7 +30,6 @@ Individual class
 #######################################################################
 
 # Generic / Built-in
-import random
 
 
 # Other Libs
@@ -143,3 +142,74 @@ class Individual():
                          'multiple_points': None}
 
         return offspringDict[self.crossover](secondParent)
+
+    def _crossover_one_point(self, secondParent):
+        """
+        Computates the offspring of two individuals
+
+
+        Parameters
+        ----------
+        secondParent : ~individual.Individual
+            Second individual implied in the crossover
+
+        Returns
+        -------
+        child1 : ~individual.Individual
+            First individual of the offspring
+
+        child2 : ~individual.Individual
+            Second individual of the offspring
+
+        """
+        N = self.numGenes
+        # Termination point
+        tP = int(np.random.rand() * (N - 1))
+
+        chromosome1 = np.zeros(N)
+        chromosome2 = np.zeros(N)
+
+        # Creates the chromosomes intersecting both parent genes
+        chromosome1[:tP] = self.chromosome[:tP]
+        chromosome1[tP:] = secondParent.chromosome[tP:]
+
+        chromosome2[tP:] = self.chromosome[tP:]
+        chromosome2[:tP] = secondParent.chromosome[:tP]
+
+        # Creates the child
+        child1 = self.__class__(self.fitnessFunc, self.crossover,
+                                self.mutation, chromosome1)
+
+        child2 = self.__class__(secondParent.fitnessFunc,
+                                secondParent.crossover,
+                                secondParent.mutation, chromosome2)
+
+        return child1, child2
+
+    def _mutation_uniform(self, pressure):
+        """
+        Create mutations on the individual
+
+
+        Parameters
+        ----------
+        pressure : float
+            Percentage of genes to mutate
+
+        Returns
+        -------
+
+        """
+        nMutatedGenes = int(pressure * self.numGenes)
+
+        # Select the mutated genes
+        mutatedGenes = np.random.randint(self.numGenes, nMutatedGenes)
+        mutatedGenes = list(set(mutatedGenes))
+
+        # Add a normal error over the mutated genes
+        for gene in mutatedGenes:
+            self.chromosome[gene] += np.random.normal(self.chromosome[gene],
+                                                      np.std(self.chromosome))
+
+
+
