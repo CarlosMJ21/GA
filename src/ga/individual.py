@@ -1,0 +1,145 @@
+# MIT License
+#
+# Copyright (c) 2020 Carlos Moreno
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+"""
+Individual class
+
+"""
+
+#######################################################################
+# Imports area
+#######################################################################
+
+# Generic / Built-in
+import random
+
+
+# Other Libs
+import numpy as np
+
+
+# Own Libs
+
+
+#######################################################################
+
+
+class Individual():
+    """
+    Class to represent an individual.
+
+    Attributes
+    ----------
+        chromosome : np.ndarray (N) [float]
+            Genes array of the individual
+
+        crossover : str
+            Type of crossover between individuals
+
+        fitnessFunc :
+            Fitness function associated to individual
+
+        mutation : str
+            Type of mutation of the individual
+
+        numGenes : int
+            Number of genes in the chromosome
+
+
+    Methods
+    ----------
+    fitness_function()
+        Return the evaluation of the individual genes on the fitness
+        function
+
+    offspring(secondParent)
+        Return the offspring of two individuals
+
+    """
+
+    def __init__(self, fitnessFunc, crossover: str, mutation: str,
+                 chromosome: np.ndarray):
+
+        """
+        Class to represent a state vector at a certain epoch.
+
+        Parameters
+        ----------
+        chromosome : np.ndarray (N) [float]
+            Genes array of the individual
+
+        crossover : str
+            Type of crossover between individuals
+
+        fitnessFunc :
+            Fitness function associated to individual
+
+        mutation : str
+            Type of mutation of the individual
+
+
+
+        Returns
+        ----------
+
+        """
+        self.chromosome = chromosome
+        self.crossover = crossover
+        self.fitnessFunc = fitnessFunc
+        self.mutation = mutation
+        self.numGenes = len(chromosome)
+
+
+    def fitness_function(self):
+        """
+        Performs the evaluation of the fitness function
+
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
+        """
+
+        return self.fitnessFunc(self.chromosome)
+
+    def offspring(self, secondParent):
+        """
+        Computates the offspring of two individuals
+
+
+        Parameters
+        ----------
+        secondParent : ~individual.Individual
+            Second individual implied in the crossover
+
+        Returns
+        -------
+
+        """
+        # Select the crossover method for the offspring
+        offspringDict = {'one_point': self._crossover_one_point,
+                         'multiple_points': None}
+
+        return offspringDict[self.crossover](secondParent)
