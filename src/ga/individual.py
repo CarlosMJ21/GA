@@ -73,6 +73,9 @@ class Individual():
     offspring(secondParent)
         Return the offspring of two individuals
 
+    mutate()
+        Create a mutation in a random number of genes
+
     """
 
     def __init__(self, fitnessFunc, crossover: str, mutation: str,
@@ -142,6 +145,26 @@ class Individual():
 
         return offspringDict[self.crossover](secondParent)
 
+    def mutate(self, pressure) -> None:
+        """
+        Computates the mutation of the individual's chromosome
+
+
+        Parameters
+        ----------
+        pressure : float
+            Percentage of genes to mutate
+
+        Returns
+        -------
+
+        """
+
+        mutationDict = {'normal': self._mutation_normal,
+                        'uniform': None}
+
+        mutationDict[self.mutation](pressure)
+
     def _crossover_one_point(self, secondParent):
         """
         Computates the offspring of two individuals
@@ -185,7 +208,7 @@ class Individual():
 
         return child1, child2
 
-    def _mutation_uniform(self, pressure):
+    def _mutation_normal(self, pressure) -> None:
         """
         Create mutations on the individual
 
