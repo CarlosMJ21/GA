@@ -82,7 +82,7 @@ class Individual():
                  chromosome: np.ndarray):
 
         """
-        Class to represent a state vector at a certain epoch.
+        Constructor of a generic individual.
 
         Parameters
         ----------
@@ -92,7 +92,7 @@ class Individual():
         crossover : str
             Type of crossover between individuals
 
-        fitnessFunc :
+        fitnessFunc : function
             Fitness function associated to individual
 
         mutation : str
@@ -112,7 +112,7 @@ class Individual():
 
     def fitness_function(self):
         """
-        Performs the evaluation of the fitness function
+        Performs the evaluation of the fitness function.
 
 
         Parameters
@@ -127,7 +127,7 @@ class Individual():
 
     def offspring(self, secondParent):
         """
-        Computates the offspring of two individuals
+        Computates the offspring of two individuals.
 
 
         Parameters
@@ -147,7 +147,7 @@ class Individual():
 
     def mutate(self, pressure) -> None:
         """
-        Computates the mutation of the individual's chromosome
+        Computates the mutation of the individual's chromosome.
 
 
         Parameters
@@ -167,7 +167,7 @@ class Individual():
 
     def _crossover_one_point(self, secondParent):
         """
-        Computates the offspring of two individuals
+        Computates the offspring of two individuals.
 
 
         Parameters
@@ -210,7 +210,7 @@ class Individual():
 
     def _mutation_normal(self, pressure) -> None:
         """
-        Create mutations on the individual
+        Create mutations on the individual.
 
 
         Parameters
