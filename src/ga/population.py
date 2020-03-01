@@ -56,7 +56,7 @@ class Population():
 
 
     """
-    def __init__(self, config: dict, fitnessFunc):
+    def __init__(self, config: dict, fitnessFunc, individuals=None):
         """
         Constructor of a generic population.
 
@@ -74,7 +74,7 @@ class Population():
         """
         self.config = config
         self.fitnessFunc = fitnessFunc
-        self.individuals = None
+        self.individuals = individuals
         self.numInd = None
 
     def initialise_population(self):
@@ -93,7 +93,9 @@ class Population():
         indAp = self.individuals.append
 
         for i in range(config['size_population']):
-            chromosome = []
+            chromosome = np.random.rand(config['num_genes']) \
+                * (config['max_value'] - config['min_value']) \
+                + config['min_value']
 
             indAp(Individual(self.fitnessFunc,
                              config['crossover'],
