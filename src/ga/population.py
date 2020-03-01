@@ -94,8 +94,8 @@ class Population():
 
         for i in range(config['size_population']):
             chromosome = np.random.rand(config['num_genes']) \
-                * (config['max_value'] - config['min_value']) \
-                + config['min_value']
+                * (config['max_values'] - config['min_values']) \
+                + config['min_values']
 
             indAp(Individual(self.fitnessFunc,
                              config['crossover'],
@@ -116,6 +116,34 @@ class Population():
 
         for i in range(self.numInd):
             self.individuals[i].mutate(self.config['pressure'])
+
+    def new_generation(self):
+        """
+        Computes the new generation of the population.
+
+        Parameters
+        ----------
+
+        Returns
+        ----------
+
+        """
+        scores = self._scores()
+        ranking = np.argsort(scores)[::-1]
+        newGeneration = []
+        newGenAp = newGeneration.append
+
+        for i, score in enumerate(ranking):
+            if i <= self.numInd / 2:
+                child1, child2 = \
+                    self.individuals[ranking[0]].offspring(
+                        self.individuals[ranking[i+1]])
+
+                newGenAp(child1)
+                newGenAp(child2)
+
+        newGeneration = newGeneration[:self.numInd]
+        self.individuals = newGeneration
 
     def _scores(self):
         """
