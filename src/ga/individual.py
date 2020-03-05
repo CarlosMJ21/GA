@@ -73,13 +73,16 @@ class Individual():
     offspring(secondParent)
         Return the offspring of two individuals
 
+    mutate()
+        Create a mutation in a random number of genes
+
     """
 
     def __init__(self, fitnessFunc, crossover: str, mutation: str,
                  chromosome: np.ndarray):
 
         """
-        Class to represent a state vector at a certain epoch.
+        Constructor of a generic individual.
 
         Parameters
         ----------
@@ -89,7 +92,7 @@ class Individual():
         crossover : str
             Type of crossover between individuals
 
-        fitnessFunc :
+        fitnessFunc : function
             Fitness function associated to individual
 
         mutation : str
@@ -109,7 +112,7 @@ class Individual():
 
     def fitness_function(self):
         """
-        Performs the evaluation of the fitness function
+        Performs the evaluation of the fitness function.
 
 
         Parameters
@@ -124,7 +127,7 @@ class Individual():
 
     def offspring(self, secondParent):
         """
-        Computates the offspring of two individuals
+        Computates the offspring of two individuals.
 
 
         Parameters
@@ -142,9 +145,29 @@ class Individual():
 
         return offspringDict[self.crossover](secondParent)
 
+    def mutate(self, pressure) -> None:
+        """
+        Computates the mutation of the individual's chromosome.
+
+
+        Parameters
+        ----------
+        pressure : float
+            Percentage of genes to mutate
+
+        Returns
+        -------
+
+        """
+
+        mutationDict = {'normal': self._mutation_normal,
+                        'uniform': None}
+
+        mutationDict[self.mutation](pressure)
+
     def _crossover_one_point(self, secondParent):
         """
-        Computates the offspring of two individuals
+        Computates the offspring of two individuals.
 
 
         Parameters
@@ -163,7 +186,7 @@ class Individual():
         """
         N = self.numGenes
         # Termination point
-        tP = int(np.random.rand() * (N - 1))
+        tP = int(np.random.rand() * N)
 
         chromosome1 = np.zeros(N)
         chromosome2 = np.zeros(N)
@@ -185,9 +208,9 @@ class Individual():
 
         return child1, child2
 
-    def _mutation_uniform(self, pressure):
+    def _mutation_normal(self, pressure) -> None:
         """
-        Create mutations on the individual
+        Create mutations on the individual.
 
 
         Parameters
@@ -202,7 +225,7 @@ class Individual():
         nMutatedGenes = int(pressure * self.numGenes)
 
         # Select the mutated genes
-        mutatedGenes = np.random.randint(self.numGenes, nMutatedGenes)
+        mutatedGenes = np.random.randint(0, self.numGenes, nMutatedGenes)
         mutatedGenes = list(set(mutatedGenes))
 
         # Add a normal error over the mutated genes
