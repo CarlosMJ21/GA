@@ -117,7 +117,7 @@ class Population():
         self.individuals = []
         indAp = self.individuals.append
 
-        for i in range(config['size_population']):
+        for _ in range(config['size_population']):
             chromosome = np.random.rand(config['num_genes']) \
                 * (config['max_values'] - config['min_values']) \
                 + config['min_values']
@@ -160,7 +160,7 @@ class Population():
         """
         optimiseDict = {'maximise': -1,
                         'minimise': 1
-            }
+                        }
         m = optimiseDict[self.config['optimisation']]
 
         scores = self._scores()
@@ -168,7 +168,7 @@ class Population():
         newGeneration = []
         newGenAp = newGeneration.append
 
-        for i, score in enumerate(ranking):
+        for i, _ in enumerate(ranking):
             if i <= self.numInd / 2:
                 child1, child2 = \
                     self.individuals[ranking[i]].offspring(
@@ -191,7 +191,7 @@ class Population():
         ----------
 
         """
-        for i in range(self.config['num_generations']):
+        for _ in range(self.config['num_generations']):
             self.new_generation()
 
             self.mutation(self.config['prob_mutation'])
