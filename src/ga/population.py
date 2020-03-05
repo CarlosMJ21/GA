@@ -49,10 +49,32 @@ class Population():
 
     Attributes
     ----------
+    config : dict
+        Configuration of the population
+
+    fitnessFunc : function
+        Fitness function associated to individual
+
+    individuals : list [~src.ga.individual]
+        Individual of a population
+
+    numInd : int
+        Number of individuals in the population
 
 
     Methods
     ----------
+    initialise_population()
+        Initialise the population given certain values at the config
+
+    mutation()
+        Calculates the mutation of the individuals
+
+    new_generation()
+        Computes the new generation of individuals
+
+    optimise()
+        Optimise the population to the fitness problem
 
 
     """
@@ -67,6 +89,9 @@ class Population():
 
         fitnessFunc : function
             Fitness function associated to individual
+
+        individuals : list [~src.ga.individual]
+            Individual of a population
 
         Returns
         ----------
@@ -102,12 +127,16 @@ class Population():
                              config['mutation'],
                              chromosome))
 
-    def mutation(self):
+        self.numInd = len(self.individuals)
+
+    def mutation(self, probMutation):
         """
         Computes the mutation over the entire population.
 
         Parameters
         ----------
+        probMutation : float
+            Probability of mutation of one individual
 
         Returns
         ----------
@@ -115,7 +144,8 @@ class Population():
         """
 
         for i in range(self.numInd):
-            self.individuals[i].mutate(self.config['pressure'])
+            if np.random.rand() < probMutation:
+                self.individuals[i].mutate(self.config['pressure'])
 
     def new_generation(self):
         """
@@ -128,15 +158,20 @@ class Population():
         ----------
 
         """
+        optimiseDict = {'maximise': -1,
+                        'minimise': 1
+            }
+        m = optimiseDict[self.config['optimisation']]
+
         scores = self._scores()
-        ranking = np.argsort(scores)[::-1]
+        ranking = np.argsort(scores)[::m]
         newGeneration = []
         newGenAp = newGeneration.append
 
         for i, score in enumerate(ranking):
             if i <= self.numInd / 2:
                 child1, child2 = \
-                    self.individuals[ranking[0]].offspring(
+                    self.individuals[ranking[i]].offspring(
                         self.individuals[ranking[i+1]])
 
                 newGenAp(child1)
@@ -144,6 +179,22 @@ class Population():
 
         newGeneration = newGeneration[:self.numInd]
         self.individuals = newGeneration
+
+    def optimise(self):
+        """
+        Optimise the problem.
+
+        Parameters
+        ----------
+
+        Returns
+        ----------
+
+        """
+        for i in range(self.config['num_generations']):
+            self.new_generation()
+
+            self.mutation(self.config['prob_mutation'])
 
     def _scores(self):
         """
