@@ -186,7 +186,7 @@ class Individual():
         """
         N = self.numGenes
         # Termination point
-        tP = int(np.random.rand() * (N - 1))
+        tP = int(np.random.rand() * N)
 
         chromosome1 = np.zeros(N)
         chromosome2 = np.zeros(N)
@@ -225,7 +225,7 @@ class Individual():
         nMutatedGenes = int(pressure * self.numGenes)
 
         # Select the mutated genes
-        mutatedGenes = np.random.randint(self.numGenes, nMutatedGenes)
+        mutatedGenes = np.random.randint(0, self.numGenes, nMutatedGenes)
         mutatedGenes = list(set(mutatedGenes))
 
         # Add a normal error over the mutated genes
